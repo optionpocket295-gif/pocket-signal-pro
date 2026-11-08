@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POCKET SIGNAL PRO — Web Edition</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#263653;--txt:#eef4ff;--muted:#9eacc5;--green:#23c98b;--red:#ff647c;--blue:#72a7ff;--gold:#f5c66a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#18294a 0,#0b1020 42%);color:var(--txt);font:15px system-ui,Segoe UI,Arial,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:22px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.brand{font-size:22px;font-weight:850;letter-spacing:.5px}.brand span{color:var(--blue)}.sub{color:var(--muted);font-size:12px;margin-top:4px;letter-spacing:1.4px}
+.pill{border:1px solid #31517b;color:#b9d3ff;padding:7px 11px;border-radius:30px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:linear-gradient(180deg,#151f34,#111a2b);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 12px 32px #0002}
+.w8{grid-column:span 8}.w4{grid-column:span 4}.w12{grid-column:span 12}.w6{grid-column:span 6}
+h2{font-size:15px;margin:0 0 14px}label{display:block;color:var(--muted);font-size:12px;margin:0 0 7px}
+select,button{font:inherit}select{width:100%;background:#0d1526;color:var(--txt);border:1px solid #30415f;border-radius:10px;padding:12px;outline:none}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:750;cursor:pointer}.primary{background:var(--blue);color:#071326}.ghost{background:#1c2b45;color:var(--txt);border:1px solid #334866}
+.btn:disabled{opacity:.45;cursor:not-allowed}.buy{color:var(--green)}.sell{color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0e1728;border:1px solid #263653;border-radius:12px;padding:13px}.num{font-size:22px;font-weight:800}.muted{color:var(--muted);font-size:12px}
+.notice{border:1px solid #745b2c;background:#2a2418;color:#f7dca3;padding:12px;border-radius:12px;font-size:13px;line-height:1.5}
+.signal{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#0d1729;border:1px solid #2a3d5d;border-radius:12px;padding:14px;margin-top:12px}
+.direction{font-size:25px;font-weight:900}.direction.buy{color:var(--green)}.direction.sell{color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #263653}th{color:var(--muted);font-weight:600}
+.tag{font-size:11px;border-radius:20px;padding:5px 8px;background:#23324d;color:#c7d9f8}.tag.demo{background:#123a32;color:#80e8c3}.tag.live{background:#42351e;color:#f7d78e}
+.small{font-size:12px;color:var(--muted);line-height:1.5}.footer{color:#7f90ad;font-size:11px;text-align:center;margin:20px 0}
+@media(max-width:760px){.w8,.w4,.w6{grid-column:span 12}.controls{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.controls{grid-template-columns:1fr}.wrap{padding:13px}}
+</style></head>
+<body><main class="wrap">
+<header class="top"><div><div class="brand">POCKET <span>SIGNAL PRO</span></div><div class="sub">WEB EDITION · FOREX & OTC · BUY / SELL</div></div><div class="pill">VERSION MVP 0.1 · MODE SIGNALS</div></header>
+<div class="grid">
+<section class="card w8">
+<h2>Configuration du signal</h2>
+<div class="controls">
+ <div><label for="market">Marché</label><select id="market"><option value="forex">Forex</option><option value="otc">OTC Pocket Option</option></select></div>
+ <div><label for="pair">Paire</label><select id="pair"></select></div>
+ <div><label for="tf">Graphique / expiration</label><select id="tf"><option value="5">5 secondes</option><option value="10">10 secondes</option><option value="15">15 secondes</option><option value="30">30 secondes</option><option value="60">1 minute</option><option value="300">5 minutes</option></select></div>
+ <div><label for="account">Compte à tester</label><select id="account"><option value="demo">Démo</option><option value="real">Réel (signaux seulement)</option></select></div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" id="generate">Générer un signal de démonstration</button><button class="btn ghost" id="clear">Effacer</button></div>
+<div id="signal" class="signal" aria-live="polite"><div><div class="muted">AUCUN SIGNAL</div><div class="small">Choisis une paire et une durée. Le flux de marché n'est pas encore connecté.</div></div><span class="tag">EN ATTENTE</span></div>
+</section>
+<section class="card w4">
+<h2>État du système</h2>
+<div class="stats">
+<div class="stat"><div class="muted">Paires</div><div class="num" id="paircount">8</div></div>
+<div class="stat"><div class="muted">Durées</div><div class="num">6</div></div>
+<div class="stat"><div class="muted">Flux live</div><div class="num" style="color:var(--gold)">OFF</div></div>
+</div>
+<div class="notice" style="margin-top:13px"><b>Connexion réelle non activée.</b><br>Cette version ne reçoit pas encore les cours en direct et ne passe aucun ordre sur Pocket Option. Le mode « Réel » sert uniquement à distinguer le contexte de test.</div>
+</section>
+<section class="card w6">
+<h2>Marchés Forex inclus</h2><div class="small">Catalogue de départ — disponibilité à confirmer selon le fournisseur de données.</div>
+<table><tbody id="forexlist"></tbody></table>
+</section>
+<section class="card w6">
+<h2>Marchés OTC inclus</h2><div class="small">Les symboles OTC doivent être confirmés par le catalogue Pocket Option du flux de données connecté.</div>
+<table><tbody id="otclist"></tbody></table>
+</section>
+<section class="card w12">
+<h2>Historique des signaux de démonstration</h2>
+<table><thead><tr><th>Heure</th><th>Paire</th><th>Graphique</th><th>Signal simulé</th><th>Compte</th><th>État</th></tr></thead><tbody id="history"><tr><td colspan="6" class="muted">Aucun signal de démonstration généré.</td></tr></tbody></table>
+</section>
+<section class="card w12">
+<h2>Ce qu'il faut connecter pour passer au vrai temps réel</h2>
+<p class="small">1. Une source de bougies/prix compatible Forex et OTC, avec fréquence suffisante pour les graphiques de 5 à 30 secondes. 2. Un moteur de calcul qui valide EMA, RSI, volatilité et qualité des bougies avant d'émettre BUY/SELL. 3. Un historique de backtest séparé pour chaque paire et chaque durée. 4. Une méthode d'accès officiellement autorisée par Pocket Option si une connexion au compte est envisagée.</p>
+<div class="notice">Pocket Option ne publie pas d'API de trading publique documentée. Évite les bots qui demandent ton mot de passe, ton code 2FA ou ton jeton de session. Le prototype est indépendant du compte et n'exécute aucun trade.</div>
+</section></div>
+<div class="footer">POCKET SIGNAL PRO · Prototype d'interface uniquement · Les signaux simulés ne représentent pas des cours ni des recommandations de trading.</div>
+</main>
+<script>
+const forex=["EUR/USD","GBP/USD","USD/JPY","USD/CHF","AUD/USD","USD/CAD","NZD/USD","EUR/GBP","EUR/JPY","GBP/JPY","GBP/CHF","AUD/JPY","EUR/AUD","EUR/CAD","CHF/JPY"];
+const otc=["EUR/USD OTC","GBP/USD OTC","USD/JPY OTC","USD/CHF OTC","AUD/USD OTC","USD/CAD OTC","NZD/USD OTC","EUR/GBP OTC","EUR/JPY OTC","GBP/JPY OTC","AUD/JPY OTC","BTC/USD OTC"];
+const $=id=>document.getElementById(id);
+function fillPairs(){let a=$("market").value==="forex"?forex:otc;$("pair").innerHTML=a.map(x=>`<option>${x}</option>`).join("");$("paircount").textContent=a.length;$("forexlist").innerHTML=forex.slice(0,8).map(x=>`<tr><td>${x}</td><td><span class="tag">Forex</span></td></tr>`).join("");$("otclist").innerHTML=otc.slice(0,8).map(x=>`<tr><td>${x}</td><td><span class="tag">OTC</span></td></tr>`).join("")}
+$("market").addEventListener("change",fillPairs);fillPairs();
+function duration(v){return v==="60"?"1 minute":v==="300"?"5 minutes":v+" secondes"}
+$("generate").addEventListener("click",()=>{
+ const pair=$("pair").value,tf=$("tf").value,account=$("account").value;
+ // Deliberately illustrative only: this is not calculated from market prices.
+ const side=Math.random()>.5?"BUY":"SELL",now=new Date();
+ const time=now.toLocaleTimeString("fr-FR");
+ $("signal").innerHTML=`<div><div class="muted">SIGNAL FICTIF · ${pair}</div><div class="direction ${side.toLowerCase()}">${side}</div><div class="small">Graphique : ${duration(tf)} · Expiration : ${duration(tf)} · ${time}</div></div><span class="tag ${account}">${account==="demo"?"DÉMO":"RÉEL · NON EXÉCUTÉ"}</span>`;
+ const row=document.createElement("tr");row.innerHTML=`<td>${time}</td><td>${pair}</td><td>${duration(tf)}</td><td class="${side.toLowerCase()}">${side}</td><td>${account==="demo"?"Démo":"Réel"}</td><td><span class="tag">SIMULATION</span></td>`;
+ const h=$("history");if(h.querySelector("td[colspan]"))h.innerHTML="";h.prepend(row);
+});
+$("clear").addEventListener("click",()=>{$("signal").innerHTML='<div><div class="muted">AUCUN SIGNAL</div><div class="small">Choisis une paire et une durée. Le flux de marché n’est pas encore connecté.</div></div><span class="tag">EN ATTENTE</span>'});
+</script></body></html>
